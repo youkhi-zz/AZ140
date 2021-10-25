@@ -20,4 +20,40 @@ AVD에서는 Azure에서와 비슷한 설정 환경을 제공함
 VM 호스트 풀 간 사용자들을 로드밸런싱 해줌
   호스트 풀 : 같은 설정값을 가진 VM 집합
   
-퍼포먼스를 위해서 사용자가 sign-in할 때 
+퍼포먼스를 위해서 사용자가 sign-in할 때 로드밸런싱이 이루어짐(breadth in mode)
+  이와 반대로 한 VM에 사용자를 끝까지 채워넣는 depth mode가 있음
+  
+Windows 10 Enterprise multi-session, 하나의 VM에 여러 사용자가 사용할 수 있음
+
+M365 license가 있으면 해당 라이센스 그대로 사용 가능함
+
+비용 절약을 위해 RI1Y, RI3Y 활용 가능
+
+Managed by MSFT : Web lient, Diagnostics, Managemet, Broker, Load balancing, Gateway, Compute, Storage, Networking
+Managed by YOU : Desktop, apps, Profile management, Sizing and scaling, Networking policies, User management and identity
+
+하이브리드 환경일 경우
+  AAD
+  AAD와 싱크중인 domain controller
+    AAD Connect
+    AAD DS
+  구독, 구독 내부에 포함된 가상 네트워크, 가상 네트워크는 Windows Server AD를 가지고 있거나, AD DS에 연결돼 있어야 함
+
+클라우드 환경일 경우
+  AAD
+  AAD DS
+  구독, 구독 내부에 포함된 가상 네트워크, 가상 네트워크는 AD DS에 연결돼 있어야 함
+  
+AVD로 사용하기 위해 생성하는 VM은
+  도메인 조인, 하이브리드 AD 조인
+  AAD 조인은 안됨
+  Windows 10 Enterprise multi-session, version 1809 or later
+  Windows 10 Enterprise, version 1809 or later
+  Windows 7 Enterprise
+  Windows Server 2019
+  Windows Server 2016
+  Windows Server 2012 R2
+
+클라이언트 : 웹클라이언트, Android(preview), Mac OS, iOS, Linux, Windows desktop
+
+
