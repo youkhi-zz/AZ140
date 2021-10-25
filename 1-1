@@ -1,0 +1,23 @@
+AVD client 혹은 HTML5 웹클라이언트를 통해 접근할 수 있음(Mac OS, Android, Windows, etc.)
+
+유저 프로필은 fslogix로 컨테이너화 돼서 관리되기 때문에 AVD에 대한 빠른 sign-in 경험을 누릴 수 있음
+
+Persona(persistent) desktop을 제공할 수 도 있는데, 이 경우 사용자의 필요에 따라 애플리케이션을 삭제하거나 추가할 수 있음
+
+AVD는 AAD를 통한 중앙화된 시큐리티를 제공함
+  MFA, RBAC
+
+AVD에서 데스크탑에 보이는 앱과 데이터는 로컬 하드웨어와 분리된 원격 서버에서 운영 -> 데이터 누출의 위협 감소
+
+사용자의 세션은 멀티 세션 환경에서나 싱글 세션 환경에서나 분리돼 있음
+
+AVD는 또한 reverse-connect 기술을 통해 보안을 강화하는데, RDP보다 더 강력한 보안을 제공함. 세션 호스트 VM에 inbound 포트를 직접 오픈하지 않음.
+
+AVD에서는 Azure에서와 비슷한 설정 환경을 제공함
+  AAD, RBAC, Azure Monitor Alerts
+  VM배포 자동화 툴, VM 업데이트 관리, DR
+  
+VM 호스트 풀 간 사용자들을 로드밸런싱 해줌
+  호스트 풀 : 같은 설정값을 가진 VM 집합
+  
+퍼포먼스를 위해서 사용자가 sign-in할 때 
