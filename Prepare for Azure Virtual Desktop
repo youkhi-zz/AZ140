@@ -1,0 +1,32 @@
+AAD는 AVD에서 identity 관리, 접근 관리에 사용됨
+
+리모트 세션 접근, administration elements, user provisioning 에 필요
+
+AVD는 Azure에 올라와있는 서비스를 사용할 때 인증시 AAD를 이용
+
+따라서 AAD는 필수로 사용해야 하는 서비스
+
+AAD(테넌트)를 생성한 후, 온프렘 AD와 연동을 위해 AAD + AD DS 통합 과정이 필요함
+
+user experience를 위해 consistent sign-on을 설정하는 것을 권장
+
+싱크 옵션 : 패스워드 해시 싱크(유저이름과 패스워드 해시가 AAD에 싱크), pass through authentication(온프레미스에서 인증을 처리하는 것, 온프렘 domain controller에 따로 설정이 필요), ADFS(RSA, 스마트카드 인증. 온프레미스에 추가적인 서버 구축이 필요하고 가용성을 확보해야 함)
+
+AVD이용시 리모트 세션은 온프렘 VM에 로그인 할 때처럼 AD DS를 이용하게 됨, AVD를 사용하기 위해 AD DS를 구축하는 방법은 세 가지가 있음
+
+1. vnet에 domain controller를 올리거나 / 온프렘의 directory service에 직접 연결함
+비용은 많이 들지 않지만, VM이중화를 사용자가 직접 관리해야 하고, AVD가 올라와있는 vnet과 연결되도록 해야 함
+domain controller VM --(vnet peering)-- AVD
+
+2. AAD DS
+AVD가 올라와있는 vnet을 AAD DS에 연결하면 됨, 로컬 AD 여부에 관계 없이 AAD DS를 사용하면 되고, 온프렘 도메인에 연결할 경우 domain controller처럼 작동함
+AAD DS in vnet --(peering)-- AVD
+
+3. 온프렘과 Azure간 네트워크 연결
+VPN / ER 사용
+
+본격적으로 AVD를 배포하기 전에 다음과 같은 리소스들이 필요함
+리소스 그룹, vnet(AVD에 필요한 url에 대해서 outbound 오픈돼 있어야 함), SA(virtual disk files, fslogix profiles)
+
+AVD를 사용하기 위해서는 다음과 같은 AAD 롤이 필요함
+global admin, user admin(유저 생성 및 접근 관리), organizational id
