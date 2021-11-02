@@ -1,0 +1,70 @@
+https://docs.microsoft.com/en-us/learn/modules/m365-wvd-security/
+
+Contoso 회사
+  M365 사용, AD DS, 온프렘 AD는 AD Connect를 통해 AAD와 싱크
+  functionality, scalability, security, cost를 고려해서 AVD를 사용하기 적합한지 확인해야 함
+  
+AVD는 Azure에서 구동되는 desktop, app 가상화 솔루션
+  managed service로 인프라 가상화 지원
+  VM관리 지원
+  Identity 관리용 솔루션으로 AAD를 사용
+  Microsoft Endpoint Manager같은 기존 툴 지원
+  
+shared responsibility
+  ms : 물리 데이터센터, 회선, 컨트롤플레인
+  사용자 : 그 외모든 사항
+  
+MS가 관리하는 항목
+  Azure web access(htmlv5 compatible browser), gateway(사용자를 게이트웨이에 연결, VM을 게이트웨이에 연결), Broker(로드밸런싱, reconnection, 리모트 앱), Diagnostics(success/failure logging)
+  
+사용자가 관리하는 항목
+  User profile, User host 접근(depth/breadth), 사이징 정책, 스케일링 정책, 네트워크 정책
+
+대표적인 client app
+  Windows Desktop, Microsoft Store Client 
+  Windows 10 enterprise multi session, Windows Server 2012 R2 and 이후버전, Windows 7 enterprise
+ 
+AVD는 AD DS를 필요로 함, AD DS 도메인 조인된 세션 호스트는 AAD에서 제공하는 것과 같은 시큐리티 기능을 가짐
+  Conditional Access, MFA, Intelligent security graph
+  
+대표적인 user profile 종류
+  local user profile : 장치의 디스크에 저장됨, 디스크가 바뀌었다 하더라도 custom값이 장치간에 싱크되지 않음
+  roaming user profile : 공유폴더에 저장된 local user profile의 카피본, 유저가 사인아웃을 할 때 변경분은 SMB 공유 폴더에 싱크됨, 유저가 다른 시스템에 사인인 하면 로밍 프로필이 새로운 시스템에 다운로드 
+  mandatory profile : admin이 미리 preconfigure 해 놓은 로밍프로필, 유저가 설정값을 변경했다고 해도 사인아웃 할 때 반영 안됨, 
+  temporary profile : 로밍 프로필에 문제가 생겼을 때 사용, 사인아웃 할 때 삭제됨
+  
+fslogix
+  AVD와 함께 사용하는 경우 Azure Storage Account에 저장
+  사용자가 AVD에 사인인 할 때, 유저 프로필의 컨테이너(vhd)는 유저가 사용할 VM에 붙음
+  fslogix는 로컬 프로필을 로밍 프로필처럼 사용할 수 있도록 해줌
+  
+Azure Files
+  는 SMB identity를 기반으로 한 인증을 지원(온프렘 AD DS, AAD DS를 통해서)
+  온프렘 AD DS 혹은 AAD DS를 통해 케베로스 프로토콜을 지원
+  
+Azure Disk Encryption
+  CMK는 Azure Dedicated HSM을 통해 가능
+  
+Security
+  AVD의 목적은 VM의 데이터를 local desktop으로 다운받지 못하게 하는 것, 오직 pixel만 전송을 목적으로 함
+  
+AVD Security Best Practice
+  Azure Security Center의 cloud security posture management 기능 활용
+  MFA
+  Conditional Access
+  오딧 로그 수집
+  RemoteApp 사용
+  Azure Monitor를 통한 사용량 확인 및 알람 받기
+  endpoint protection
+  endppoint detection and response 제품 활용
+  threat & vulnerability 관리
+  최대 inactive 시간 설정 및 연결종료 정책 설정
+  idle 시간 동안 화면 잠금 설정
+  리소스마다 접근할 수 있는 유저 제한
+  OS 일부 기능 비활성화
+  AVD 호스트 풀에서 limit device redirection under RDP properties
+
+Microsoft Defender의 endpoint protection 기능 사용
+
+AppLocker 사용
+
