@@ -68,4 +68,20 @@ Microsoft Defender의 endpoint protection 기능 사용
 
 AppLocker 사용
 
+AVD : shared service offering, customer관점에서 서비스를 관리하고, client와 host에 연결할 secured endpoint 제공
+
+AVD는 RDP를 사용
+  커넥션의 시작은 가장 가까운 Azure DC로 dnslookup을 하면서 시작됨
+  1. AAD로부터 인증을 받으면, Remote Desktop Service 클라이언트한테 token이 반환됨
+  2. 게이트웨이가 connection broker와 함께 토큰을 확인함
+  3. 브로커는 유저에게 할당된 리소스를 확인하기 위해 Azure SQL DB에 쿼리함
+  4. 게이트웨이와 브로커는 유저에게 할당할 세션 호스트를 선택함
+  5. 세션 호스트는 AVD 게이트웨이를 통해 reverse connection을 맺(인바운드 포트 X)
+  게이트웨이는 모든 세션 연결을 관리함(클라이언트에게 픽셀 전송)
+ 
+ NSG의 서비스태그를 통해 트래픽 제한하기
+  NSG : 이름, priority, source, destination, protocol, Allow / Deny, port range - 3 & 4 layer 네트워크 서비스
+  서비스태그 : Azure 서비스들의 IP prefix 모음, 글로벌 혹은 리전별 트래픽 제어에 사용할 수 있음
+  Azure FW (for application level protection) : AVD를 사용하기 위해서는 outbound traffic이 필요한데, 이 outbound traffic을 filtering하기 위해 FW을 쓸 수 있음. AVD는 FQDN에 대한 접근이 필요하고, FW은 AVD FQDN 태그를 제공하기 때문에 설정이 더 간편
+
 https://docs.microsoft.com/en-us/learn/modules/m365-wvd-security/6-secure-network-access
