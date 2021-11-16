@@ -1,0 +1,7 @@
+MSIX app attach : app과 OS 환경을 분리시키고, 사용자들에게 app을 assign할 수 있는 microsoft의 app delivery 기술
+
+MSIX, MSIX Packaging, MSIX Packaging Tool
+
+MSIX : Windows app 패키징 포맷
+
+https://docs.microsoft.com/en-us/learn/modules/m365-wvd-application-management/2-what-is-msix
