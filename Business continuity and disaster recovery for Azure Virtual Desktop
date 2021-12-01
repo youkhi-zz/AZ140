@@ -23,13 +23,13 @@ Scenario 2 : single datacenter of availability zone failure within one region
     AVD : 영향을 받지 않음
     AD DS & AAD DS : 이런 시나리오에 대비하기 위해 AAD 테넌트 당 하나 이상의 복제본을 준비해야 함. 복제본은 AAD DS를 지원하는 리전의 어느 peered vnet이든 상관 없음. 만약 온프렘의 domain controller를 사용할 경우, 새 리전에 대한 연결성 검토를 해야함(VPN, ER, vWAN). 만약 AAD DS를 사용할 경우, 다른 리전에 복제본을 만들어 놓을 수 있음. 복제본을 호스팅하는 리전의 vnet은 메인 리전의 vnet과 통신할 수 있어야 함. 브이넷 피어링을 권장. 
     Host pool
-      active - active : 
-      active - passive :
+      active - active : 하나의 호스트 풀에서 여러 리전에 있는 VM을 포함시킬 수 있음. 유저의 fslogix에 여러 리전에 걸친 스토리지에서 접근하기 위해 캐시 기능을 활성화 시켜야 함. msix app attach에 사용하기 위해선 다른 리전에 파일쉐어를 배포해서 사용. 로컬 스토리지 위치에 우선권을 주기 위해서는 group policy를 지정해야 함. 유저 입장에서는 사용하기 편한 옵션이지만 퍼포먼스측면에서 봤을 때 최적화된 설정은 아님.
+      active - passive : ASR을 이용해서 secondary region에 VM을 복제할 수 있음. ASR을 사용할 경우 VM을 수동으로 등록할 필요는 없지만, AVD agent가 가장 최근의 security token을 가지고 가장 가까운 host pool에 등록할 것이기 때문에, 사용자 입장에서는 reconnect해야 함. 두 번째 리전에 hot standby를 구성해 놓고 모든 리소스는 꺼놓을 수 있음. app group도 secondary region에 생성해 놓고 유저에게 assign해야 함. 
     vnet
       이런 종류의 failure에 대해서는 vnet이 영향을 받기 때문에, 다른 리전에 vnet을 배포해 놓아야 함. vnet끼리는 피어링으로 연결할 수 있고, ASR을 사용할 수 있음. secondary vnet에 대해서도 온프렘과 연결을 구성해 놓아야 함
     fslogix and msix app attach
-    master image
-    app dependencies
+    master image : secondary region에 master image의 복사본을 마련해 두어야 함. Azure Shared Image Gallery. 
+    app dependencies : primary region의 리소스에 대해 dependency가 있는 app들은 secondary region에서도 해당 리소스들을 동일하게 필요로 함. 
     https://docs.microsoft.com/en-us/learn/modules/business-continuity-disaster-recovery-azure-virtual-desktop/4-identify-correct-dr-scenario
      
   
